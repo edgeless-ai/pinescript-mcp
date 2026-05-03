@@ -1,0 +1,32 @@
+{
+  "name": "@edgeless-ai/pinescript-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Pine Script development — linting, validation, migration, and templates. No TradingView Desktop required.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "pinescript-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test tests/"
+  },
+  "keywords": [
+    "mcp",
+    "pinescript",
+    "pine-script",
+    "tradingview",
+    "linter",
+    "validator",
+    "trading",
+    "technical-analysis"
+  ],
+  "author": "Edgeless Labs",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
