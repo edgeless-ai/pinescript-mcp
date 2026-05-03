@@ -1,5 +1,5 @@
 {
-  "name": "@edgeless-ai/pinescript-mcp",
+  "name": "pinescript-mcp",
   "version": "1.0.0",
   "description": "MCP server for Pine Script development — linting, validation, migration, and templates. No TradingView Desktop required.",
   "type": "module",

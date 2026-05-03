@@ -1,5 +1,6 @@
 [![CI](https://github.com/edgeless-ai/pinescript-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/edgeless-ai/pinescript-mcp/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/pinescript-mcp)](https://www.npmjs.com/package/pinescript-mcp)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
 
 # pinescript-mcp
@@ -24,13 +25,13 @@ MCP server for Pine Script development. Lint, validate, migrate, and scaffold Pi
 ## Install
 
 ```bash
-npm install @edgeless-ai/pinescript-mcp
+npm install pinescript-mcp
 ```
 
 ### Claude Code
 
 ```bash
-claude mcp add pinescript -- npx @edgeless-ai/pinescript-mcp
+claude mcp add pinescript -- npx pinescript-mcp
 ```
 
 ### Claude Desktop
@@ -42,7 +43,7 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "pinescript": {
       "command": "npx",
-      "args": ["@edgeless-ai/pinescript-mcp"]
+      "args": ["pinescript-mcp"]
     }
   }
 }
@@ -51,7 +52,7 @@ Add to `claude_desktop_config.json`:
 ### Manual
 
 ```bash
-npx @edgeless-ai/pinescript-mcp
+npx pinescript-mcp
 ```
 
 Communicates over stdio using the Model Context Protocol.
