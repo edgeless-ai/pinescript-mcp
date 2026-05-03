@@ -1,3 +1,7 @@
+[![CI](https://github.com/edgeless-ai/pinescript-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/edgeless-ai/pinescript-mcp/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
+
 # pinescript-mcp
 
 MCP server for Pine Script development. Lint, validate, migrate, and scaffold Pine Script without needing TradingView Desktop.
