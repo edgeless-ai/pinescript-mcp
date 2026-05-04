@@ -5,26 +5,30 @@
 
 # pinescript-mcp
 
-MCP server for Pine Script development. Lint, validate, migrate, and scaffold Pine Script without needing TradingView Desktop.
-
-8 tools. Zero external dependencies beyond the MCP SDK. Pure static analysis.
+MCP server for Pine Script development. Gives your AI assistant the ability to lint, migrate, and scaffold Pine Script -- no TradingView Desktop required.
 
 <p align="center">
   <img src="demo.gif" alt="pinescript-mcp demo — lint a broken v4 script, migrate to v6, re-lint clean" width="800">
 </p>
 
-## Tools
+## What problems does this solve?
 
-| Tool | Description |
-|------|-------------|
-| `pine_validate` | Parse and validate structure — version, declaration, variables, functions, inputs, plots |
-| `pine_lint` | 16 rules across errors, warnings, and info — catches v4/v5/v6 breaking changes, repainting, bad practices |
-| `pine_migrate` | Migrate code between v4→v5, v5→v6, or v4→v6 with a full change log |
-| `pine_migration_guide` | Get the complete breaking changes guide for a version pair |
-| `pine_template` | 7 starter templates — indicators, strategies, libraries, alerts |
-| `pine_reference` | Look up built-in functions, variables, and constants by name |
-| `pine_namespace` | Browse Pine Script namespaces (ta, math, str, request, strategy) |
-| `pine_repainting_check` | Focused repainting analysis — lookahead leaks, timenow, barstate, varip |
+**Your v4 scripts are breaking.** TradingView is pushing everyone to v5/v6. Functions got renamed, parameters got removed, namespaces changed. `pine_migrate` rewrites your code automatically -- v4 to v5, v5 to v6, or v4 to v6 in one shot -- and tells you exactly what changed.
+
+**Your backtest returns 400% but live trading loses money.** Repainting bugs leak future data into historical bars. `pine_repainting_check` catches `security()` with lookahead, `timenow`, unguarded `barstate`, and `varip` -- the patterns that make backtests lie.
+
+**You're writing Pine Script from memory.** Was it `sma()` or `ta.sma()`? Does `strategy.entry()` take `qty` or `size`? `pine_reference` and `pine_namespace` give your AI instant access to every built-in function signature without leaving the conversation.
+
+**You keep copy-pasting from forums.** `pine_template` ships 7 battle-tested starting points -- indicators, strategies, libraries, and alert setups -- so you start from working code instead of Stack Overflow fragments.
+
+## Examples
+
+See real workflows in action:
+
+- [Migrating a legacy v4 codebase to v6](docs/examples/migrate-legacy-codebase.md) -- audit, migrate, verify
+- [Catching repainting bugs before they cost you money](docs/examples/catch-repainting-bugs.md) -- why your backtest lies
+- [Building a strategy from scratch](docs/examples/build-strategy-from-scratch.md) -- templates + reference lookup
+- [Automated code review for Pine Script](docs/examples/code-review-pine-script.md) -- structural audit + lint + repainting check
 
 ## Install
 
@@ -53,7 +57,7 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-### Manual
+### Any MCP client
 
 ```bash
 npx pinescript-mcp
@@ -61,76 +65,81 @@ npx pinescript-mcp
 
 Communicates over stdio using the Model Context Protocol.
 
-## Lint Rules
+## Tools
+
+| Tool | What it does |
+|------|-------------|
+| `pine_lint` | 16 rules across errors, warnings, and info. Catches v4/v5/v6 breaking changes, repainting, bad practices. |
+| `pine_migrate` | Rewrite code between v4, v5, and v6 with a full change log. Handles 40+ function renames. |
+| `pine_repainting_check` | Focused analysis for data integrity -- lookahead leaks, timenow, barstate, varip, calc_on_every_tick. |
+| `pine_validate` | Parse and report structure -- version, declaration, variables, functions, inputs, plots, requests. |
+| `pine_template` | 7 starter templates: indicators, strategies, libraries, alerts. |
+| `pine_reference` | Look up any built-in function, variable, or constant by name. |
+| `pine_namespace` | Browse Pine Script namespaces: ta, math, str, request, strategy. |
+| `pine_migration_guide` | Get the complete breaking changes list for any version pair. |
+
+## Lint rules
 
 ### Errors
 
-| Rule | Description |
-|------|-------------|
+| Rule | Catches |
+|------|---------|
 | E001 | Missing `//@version=N` annotation |
 | E002 | Missing `indicator()` / `strategy()` / `library()` declaration |
 | E003 | `=` vs `:=` reassignment confusion |
-| E004 | v4 functions used in v5+ (e.g., `sma()` → `ta.sma()`) |
+| E004 | v4 functions used in v5+ (`sma()` should be `ta.sma()`) |
 | E005 | `security()` without `request.` prefix in v5+ |
 | E006 | v6 breaking changes (`transp` removal, `when` parameter removal) |
 | E007 | Plot functions called inside user-defined functions |
 
 ### Warnings
 
-| Rule | Description |
-|------|-------------|
+| Rule | Catches |
+|------|---------|
 | W001 | `request.security()` with `lookahead_on` but no `[1]` offset (repainting) |
 | W002 | `timenow` usage (always repaints) |
 | W003 | `barstate.isrealtime` without `barstate.isconfirmed` guard |
-| W004 | `varip` — not reproducible on historical bars |
+| W004 | `varip` -- not reproducible on historical bars |
 | W005 | More than 40 `request.*()` calls |
 | W006 | More than 64 plot calls |
 | W007 | `calc_on_every_tick=true` in strategy |
 
 ### Info
 
-| Rule | Description |
-|------|-------------|
+| Rule | Catches |
+|------|---------|
 | I001 | Missing `title` on plot functions |
 | I002 | Strategy with entries but no exits or risk management |
 
 ## Migration
 
-Supports v4→v5, v5→v6, and v4→v6 (chained).
+Supports v4 to v5, v5 to v6, and v4 to v6 (chained).
 
-**v4 → v5** renames 40+ functions:
-- `study()` → `indicator()`
-- `sma()` → `ta.sma()`, `ema()` → `ta.ema()`, `rsi()` → `ta.rsi()`, ...
-- `security()` → `request.security()`
-- `abs()` → `math.abs()`, `ceil()` → `math.ceil()`, ...
-- `tostring()` → `str.tostring()`
-- `iff(cond, a, b)` → `cond ? a : b`
-- `resolution=` → `timeframe=`
+**v4 to v5** renames 40+ functions:
+- `study()` to `indicator()`
+- `sma()` to `ta.sma()`, `ema()` to `ta.ema()`, `rsi()` to `ta.rsi()`, ...
+- `security()` to `request.security()`
+- `abs()` to `math.abs()`, `ceil()` to `math.ceil()`, ...
+- `tostring()` to `str.tostring()`
+- `iff(cond, a, b)` to ternary `cond ? a : b`
+- `resolution=` to `timeframe=`
 
-**v5 → v6** handles breaking changes:
-- `transp` parameter removal (flags with TODO)
+**v5 to v6** handles breaking changes:
+- `transp` parameter removal (flags with TODO comment)
 - `when` parameter removal from strategy functions
-- `timeframe.period` comparison updates (`"D"` → `"1D"`)
+- `timeframe.period` comparison updates
 
 ## Templates
 
-- `indicator-basic` — Simple overlay indicator
-- `indicator-oscillator` — Oscillator with overbought/oversold levels
-- `strategy-basic` — Moving average crossover strategy
-- `strategy-rsi-mean-reversion` — RSI mean reversion with risk management
-- `strategy-breakout` — Donchian channel breakout
-- `library-basic` — Reusable library scaffold
-- `alert-setup` — Alert condition patterns
-
-## Reference
-
-Built-in reference covers 5 namespaces with function signatures, descriptions, and examples:
-
-- **ta** — Technical analysis (sma, ema, rsi, macd, bb, stoch, crossover, ...)
-- **math** — Math functions (abs, ceil, floor, round, sqrt, log, pow, ...)
-- **str** — String operations (tostring, tonumber, contains, replace, ...)
-- **request** — Data requests (security, security_lower_tf, currency_rate, ...)
-- **strategy** — Strategy functions (entry, exit, close, close_all, risk, ...)
+| Template | Description |
+|----------|-------------|
+| `indicator-basic` | Simple overlay indicator |
+| `indicator-oscillator` | Oscillator with overbought/oversold levels |
+| `strategy-basic` | Moving average crossover strategy |
+| `strategy-rsi-mean-reversion` | RSI mean reversion with risk management |
+| `strategy-breakout` | Donchian channel breakout |
+| `library-basic` | Reusable library scaffold |
+| `alert-setup` | Alert condition patterns |
 
 ## Development
 
