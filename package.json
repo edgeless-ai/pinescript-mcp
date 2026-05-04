@@ -13,13 +13,19 @@
   },
   "keywords": [
     "mcp",
+    "model-context-protocol",
+    "mcp-server",
     "pinescript",
     "pine-script",
+    "pine-script-linter",
     "tradingview",
+    "tradingview-tools",
     "linter",
     "validator",
     "trading",
-    "technical-analysis"
+    "technical-analysis",
+    "code-migration",
+    "repainting-detection"
   ],
   "author": "Edgeless Labs",
   "license": "MIT",

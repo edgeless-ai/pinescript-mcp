@@ -1,0 +1,21 @@
+//@version=6
+indicator("RSI Strategy", overlay=true)
+
+length = input.int(14, "Length")
+src = input.source(close, "Source")
+rsiVal = ta.rsi(src, length)
+smaVal = ta.sma(close, 20)
+
+upperBand = smaVal + 2 * ta.stdev(close, 20)
+lowerBand = smaVal - 2 * ta.stdev(close, 20)
+
+crossUp = ta.crossover(rsiVal, 30)
+crossDown = ta.crossunder(rsiVal, 70)
+
+htfClose = request.security(syminfo.tickerid, "1D", close[1], lookahead=barmerge.lookahead_on)
+
+plot(smaVal, title="SMA", color=color.new(color.blue, 20))
+plot(upperBand, title="Upper Band", color=color.new(color.red, 50))
+plot(lowerBand, title="Lower Band", color=color.new(color.green, 50))
+plotshape(crossUp, title="Cross Up", style=shape.triangleup, location=location.belowbar, color=color.green)
+plotshape(crossDown, title="Cross Down", style=shape.triangledown, location=location.abovebar, color=color.red)

@@ -1,0 +1,21 @@
+//@version=4
+study("RSI Strategy", overlay=true)
+
+length = input(14, "Length")
+src = close
+rsiVal = rsi(src, length)
+smaVal = sma(close, 20)
+
+upperBand = smaVal + 2 * stdev(close, 20)
+lowerBand = smaVal - 2 * stdev(close, 20)
+
+crossUp = crossover(rsiVal, 30)
+crossDown = crossunder(rsiVal, 70)
+
+htfClose = security(syminfo.tickerid, "D", close, lookahead=barmerge.lookahead_on)
+
+plot(smaVal, color=color.blue, transp=20)
+plot(upperBand, color=color.red, transp=50)
+plot(lowerBand, color=color.green, transp=50)
+plotshape(crossUp, style=shape.triangleup, location=location.belowbar, color=color.green)
+plotshape(crossDown, style=shape.triangledown, location=location.abovebar, color=color.red)

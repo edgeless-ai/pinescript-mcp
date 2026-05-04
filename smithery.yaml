@@ -1,0 +1,23 @@
+name: pinescript-mcp
+description: Pine Script development MCP server — lint, validate, migrate v4→v5→v6, repainting detection, templates, and reference
+version: 1.0.0
+author: Edgeless Labs
+repository: https://github.com/edgeless-ai/pinescript-mcp
+npm: pinescript-mcp
+tools:
+  - name: pine_validate
+    description: Validate Pine Script source code structure, version, and declaration
+  - name: pine_lint
+    description: Lint Pine Script for errors, warnings, repainting issues, and best practices (16 rules)
+  - name: pine_migrate
+    description: Migrate Pine Script between versions (v4→v5, v5→v6, v4→v6) with change log
+  - name: pine_migration_guide
+    description: Get breaking changes guide between Pine Script versions
+  - name: pine_template
+    description: Get Pine Script starter templates (indicators, strategies, libraries, alerts)
+  - name: pine_reference
+    description: Look up Pine Script built-in functions, variables, and constants
+  - name: pine_namespace
+    description: Browse Pine Script namespaces (ta, math, str, request, strategy)
+  - name: pine_repainting_check
+    description: Focused analysis for repainting issues in Pine Script code

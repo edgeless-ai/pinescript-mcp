@@ -1,0 +1,19 @@
+//@version=6
+indicator("Repainting Traps Demo", overlay=true)
+
+// TRAP 1: request.security with lookahead but no offset
+htfClose = request.security(syminfo.tickerid, "D", close, lookahead=barmerge.lookahead_on)
+
+// TRAP 2: timenow always repaints
+isRecent = time > timenow - 86400000
+
+// TRAP 3: barstate.isrealtime without isconfirmed guard
+if barstate.isrealtime
+    label.new(bar_index, high, "LIVE")
+
+// TRAP 4: varip is not reproducible on historical bars
+varip int tickCount = 0
+tickCount += 1
+
+plot(htfClose, title="HTF Close")
+plot(tickCount, title="Tick Count")
