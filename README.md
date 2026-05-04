@@ -9,6 +9,10 @@ MCP server for Pine Script development. Lint, validate, migrate, and scaffold Pi
 
 8 tools. Zero external dependencies beyond the MCP SDK. Pure static analysis.
 
+<p align="center">
+  <img src="demo.gif" alt="pinescript-mcp demo — lint a broken v4 script, migrate to v6, re-lint clean" width="800">
+</p>
+
 ## Tools
 
 | Tool | Description |
